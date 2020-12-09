@@ -15,6 +15,7 @@ let countdownTitle = '';
 let countdownDate = '';
 let countdownValue = Date;
 let countdownActive;
+let savedCountdown;
 
 const second = 1000;
 const minute = second * 60;
@@ -29,16 +30,13 @@ dateEl.setAttribute('min', today);
 function updateDOM() {
     countdownActive = setInterval(() => {
         const now = new Date().getTime();
-        const distance = countdownValue - now;
-    
+        const distance = countdownValue - now;    
         const days = Math.floor(distance / day);
         const hours = Math.floor((distance % day) / hour);
         const minutes = Math.floor((distance % hour) / minute);
         const seconds = Math.floor((distance % minute) / second);
-
         // Hide Input
         inputContainer.hidden = true;
-
         // If The Countdown Has Ended, Show Complete
         if (distance < 0) {
             countdownEl.hidden = true;
@@ -65,6 +63,11 @@ function updateCountdown(e) {
     e.preventDefault();
     countdownTitle = this[0].value;
     countdownDate = this[1].value;
+    savedCountdown = {
+        title: countdownTitle,
+        date: countdownDate,
+    };
+    localStorage.setItem('countdown', JSON.stringify(savedCountdown));
     // Check For Valid Date
     if(countdownDate === '') {
         alert('Please Select A Date');
@@ -86,9 +89,26 @@ function reset() {
     // Reset Values
     countdownTitle = '';
     countdownDate ='';
+    localStorage.removeItem('countdown');
+}
+
+// Restore Countdown
+function restorePreviousCountdown() {
+    // Get Countdown from localStorage If Availabe
+    if (localStorage.getItem('countdown')) {
+        inputContainer.hidden = true;
+        savedCountdown = JSON.parse(localStorage.getItem('countdown'));
+        countdownTitle = savedCountdown.title;
+        countdownDate = savedCountdown.date;
+        countdownValue = new Date(countdownDate).getTime();
+        updateDOM();
+    }
 }
 
 // Event Listener
 countdownForm.addEventListener('submit', updateCountdown);
 countdownBtn.addEventListener('click', reset);
 completeBtn.addEventListener('click', reset);
+
+// On Load, check localStorage
+restorePreviousCountdown();
