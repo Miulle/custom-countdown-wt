@@ -73,7 +73,7 @@ h1 {
 
 label {
   font-weight: bold;
-  margin-left: 10px;
+  /* margin-left: 0px; */
 }
 
 input {
@@ -81,9 +81,9 @@ input {
   margin-bottom: 10px;
   padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 20px;
+  border-radius: 5px;
   background: #fff;
-  outline: none;
+  /* outline: none; */
   font-family: Varela Round, sans-serif;
 }
 
@@ -96,7 +96,7 @@ button {
   border: none;
   text-transform: uppercase;
   background: #006959;
-  color: white;
+  color: #fff;
   cursor: pointer;
   outline: none;
 }
